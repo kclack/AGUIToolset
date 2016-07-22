@@ -569,11 +569,11 @@ AElFTkSuQmCC</Preview>
         <Property name="UseVisualStyleBackColor">True</Property>
         <Event name="Click">buttonSelectSub_Click</Event>
       </Object>
-      <Object type="System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="combobox1" children="Controls">
+      <Object type="System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="subList" children="Controls">
         <Property name="FormattingEnabled">True</Property>
         <Property name="Location">548, 56</Property>
         <Property name="Margin">6, 6, 6, 6</Property>
-        <Property name="Name">combobox1</Property>
+        <Property name="Name">subList</Property>
         <Property name="Size">448, 34</Property>
         <Property name="TabIndex">2</Property>
       </Object>
@@ -606,7 +606,11 @@ $formBaronVonAzure_Load={
 
 $buttonLoginToAzure_Click={
 	#TODO: Place custom script here
-	Login-AzureRmAccount
+	#Login-AzureRmAccount
+	Add-AzureAccount
+	
+	$azureSubs = (get-AzureSubscription).SubscriptionName
+	Load-ComboBox -ComboBox $subList -Items $azureSubs
 }
 
 #region Control Helper Functions
@@ -681,12 +685,15 @@ function Load-ComboBox
 }
 #endregion
 
-$buttonSelectSub_Click={
+$buttonSelectSub_Click = {
+	$activesub = $subList.Text
+	Select-AzureSubscription -SubscriptionName + " $($activesub) " -Current
+	
 	#TODO: Place custom script here
 	
 }
 ]]></Code>
-  <Mode>0</Mode>
+  <Mode>1</Mode>
   <Assemblies>
     <Assembly>mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</Assembly>
     <Assembly>System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</Assembly>
